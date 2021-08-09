@@ -10,7 +10,7 @@ class ImagePane(QtWidgets.QWidget):
 
         self.layout = QtWidgets.QVBoxLayout()
 
-        self.colorBackground = QtWidgets.QLabel(' '*100)
+        self.colorBackground = QtWidgets.QLabel()
         self.colorBackground.setAlignment(Qt.Qt.AlignCenter)
         self.colorBackground.setStyleSheet("""
                                            border: 1px solid black;

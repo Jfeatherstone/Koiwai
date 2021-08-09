@@ -5,3 +5,7 @@ Koiwai is an image editing program made specifically for manga (or other comic) 
 ### Status
 
 The program is currently under development, and is not functional. :/
+
+### Credits
+
+Icons are from the [Eva pack](https://akveo.github.io/eva-icons/#/?type=outline)

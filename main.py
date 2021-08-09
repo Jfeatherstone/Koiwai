@@ -17,27 +17,32 @@ def main():
     mainWindowWidget.resize(screen.size())
     mainVerticalLayout = QtWidgets.QVBoxLayout()
 
-    mainHorizontalLayout = QtWidgets.QHBoxLayout()
+    optionsPane = OptionsPane() 
+    mainVerticalLayout.addWidget(optionsPane)
+   
+    # Technically this isn't actually a layout, but rather widget
+    # but we use it exactly as a layout (since splitter automatically
+    # puts nice resize handles between objects)
+    mainHorizontalLayout = QtWidgets.QSplitter()
 
     filePane = FileDialogPane('/home/jack')
     imagePane = ImagePane()  
-    optionsPane = OptionsPane()
 
     # Take care of communication between the various panels
     filePane.fileClickSgl.connect(imagePane.setActiveImage)
 
     # Add everything in the proper order
-    mainVerticalLayout.addWidget(optionsPane)
 
     mainHorizontalLayout.addWidget(filePane)
     mainHorizontalLayout.addWidget(imagePane)
-    mainVerticalLayout.addLayout(mainHorizontalLayout)
+    mainVerticalLayout.addWidget(mainHorizontalLayout)
 
     mainWindowWidget.setLayout(mainVerticalLayout)
 
     # Set some sizes of objects to make them look good
-    imagePane.setMinimumSize(screen.size().width() - filePane.size().width() - 100, -1)
-    optionsPane.setMinimumSize(-1, 120)
+    imagePane.setMinimumWidth(screen.size().width() - filePane.size().width() - 150)
+    optionsPane.setMinimumHeight(120)
+    optionsPane.setMaximumHeight(121)
 
     mainWindowWidget.setWindowTitle('Koiwai')
     mainWindowWidget.show() 

@@ -1,5 +1,8 @@
 import sys
 import os
+from pathlib import Path
+
+from Config import settings
 
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 
@@ -15,6 +18,9 @@ class FileDialogPane(QtWidgets.QWidget):
 
         self.currentDirectory = startDirectory
 
+        self.showHiddenFiles = settings["showHiddenFiles"]
+        self.showNonImageFiles = settings["showNonImageFiles"]
+
         self.resize(DEFAULT_WIDTH, self.sizeHint().height())
 
         # Simple vertical stacking of the elements
@@ -26,10 +32,23 @@ class FileDialogPane(QtWidgets.QWidget):
 
         self.layout.addWidget(self.dirSelectBtn)
 
+        # The label for the current directory
         self.currentDirLbl = QtWidgets.QLabel() 
-        self.currentDirLbl.setText(self.currentDirectory)
+        self.currentDirLbl.setText('Current Directory:\n' + startDirectory)
         self.currentDirLbl.setAlignment(Qt.Qt.AlignCenter)
         self.layout.addWidget(self.currentDirLbl)
+
+        # Checkbox to show hidden files
+        self.showHiddenFilesChBx = QtWidgets.QCheckBox('Show hidden files')
+        self.showHiddenFilesChBx.setChecked(self.showHiddenFiles)
+        self.showHiddenFilesChBx.stateChanged.connect(self._toggleShowHiddenFiles)
+        self.layout.addWidget(self.showHiddenFilesChBx)
+
+        # Checkbox to show non image files
+        self.showNonImageFilesChBx = QtWidgets.QCheckBox('Show non-image files')
+        self.showNonImageFilesChBx.setChecked(self.showNonImageFiles)
+        self.showNonImageFilesChBx.stateChanged.connect(self._toggleShowNonImageFiles)
+        self.layout.addWidget(self.showNonImageFilesChBx)
 
         # The list of files in the current directory
         self.fileLst = QtWidgets.QListWidget()
@@ -43,29 +62,67 @@ class FileDialogPane(QtWidgets.QWidget):
         self.setLayout(self.layout)
         self.setWindowTitle("File Panel")
 
+        self.updateFileList(startDirectory)
+
+
     def selectDirectory(self):
         dirName = QtWidgets.QFileDialog.getExistingDirectory(self, 'Open directory', self.currentDirectory)
-        self.currentDirLbl.setText(dirName)
-        self.currentDirectory = dirName
 
-        self.updateFileList()
+        self.updateFileList(dirName)
 
 
-    def updateFileList(self):
-        # First, clear the list
-        self.fileLst.clear()
+    def updateFileList(self, newDirectory):
+        if len(newDirectory) > 0:# and newDirectory != self.currentDirectory:
+            self.currentDirLbl.setText('Current Directory:\n' + newDirectory)
+            self.currentDirectory = newDirectory
 
-        # Now add all of the new items
-        fileArr = os.listdir(self.currentDirectory)
-        self.fileLst.addItems(fileArr)
+            # First, clear the list
+            self.fileLst.clear()
+
+            # Now add all of the new items
+            fileArr = os.listdir(self.currentDirectory)
+            self.fileLst.addItem('..')
+
+            # Remove hidden files if applicable
+            if not self.showHiddenFiles:
+                fileArr = [f for f in fileArr if f[0] != '.']
+
+            # Remove non image files if applicable
+            if not self.showNonImageFiles:
+                fileArr = [f for f in fileArr if Path(self.currentDirectory + '/' + f).suffix[1:] in settings["imageFileTypes"]]
+
+            self.fileLst.addItems(fileArr)
+            return
 
     # Decorator indicates that this will be used to signal an event in another widget
     # (in the ImagePane, to be specific)
     @QtCore.pyqtSlot()
     def _onListItemClick(self):
         fileName = self.fileLst.currentItem().text()
+
+        if fileName == '..':
+            self.updateFileList(str(Path(self.currentDirectory).parent))
+            return
+
         #print(self.currentDirectory + '/' + item.text())
+        # If we have selected a directory, we can change that to be the active directory
+        if os.path.isdir(self.currentDirectory + '/' + fileName):
+            self.updateFileList(str(Path(self.currentDirectory + '/' + fileName)))
+            return
+
+        # Otherwise, we open the image in the viewer pane
         if len(fileName) > 0:
             self.fileClickSgl.emit(self.currentDirectory + '/' + fileName)
+            return
             
-		
+	
+    def _toggleShowHiddenFiles(self, state):
+
+        # Update the state var and then refresh the list
+        self.showHiddenFiles = state == QtCore.Qt.Checked 
+        self.updateFileList(self.currentDirectory)
+
+    def _toggleShowNonImageFiles(self, state):
+
+        self.showNonImageFiles = state == QtCore.Qt.Checked
+        self.updateFileList(self.currentDirectory)
