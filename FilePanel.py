@@ -38,18 +38,35 @@ class FileDialogPane(QtWidgets.QWidget):
         self.currentDirLbl.setAlignment(Qt.Qt.AlignCenter)
         self.layout.addWidget(self.currentDirLbl)
 
+        # Put the refresh button next to the two checkboxes, so we need another
+        # horizontal layout
+        self.fileOptionsLayout = QtWidgets.QHBoxLayout()
+
+        self.checkBoxLayout = QtWidgets.QVBoxLayout()
+
         # Checkbox to show hidden files
         self.showHiddenFilesChBx = QtWidgets.QCheckBox('Show hidden files')
         self.showHiddenFilesChBx.setChecked(self.showHiddenFiles)
         self.showHiddenFilesChBx.stateChanged.connect(self._toggleShowHiddenFiles)
-        self.layout.addWidget(self.showHiddenFilesChBx)
+        self.checkBoxLayout.addWidget(self.showHiddenFilesChBx)
 
         # Checkbox to show non image files
         self.showNonImageFilesChBx = QtWidgets.QCheckBox('Show non-image files')
         self.showNonImageFilesChBx.setChecked(self.showNonImageFiles)
         self.showNonImageFilesChBx.stateChanged.connect(self._toggleShowNonImageFiles)
-        self.layout.addWidget(self.showNonImageFilesChBx)
+        self.checkBoxLayout.addWidget(self.showNonImageFilesChBx)
 
+        self.fileOptionsLayout.addLayout(self.checkBoxLayout)
+
+        # The refresh button
+        self.refreshBtn = QtWidgets.QPushButton()
+        self.refreshBtn.setIcon(QtGui.QIcon('assets/icons/sync-outline.svg'))
+        self.refreshBtn.setMaximumWidth(40)
+        self.refreshBtn.clicked.connect(lambda x: self.updateFileList(self.currentDirectory))
+        self.fileOptionsLayout.addWidget(self.refreshBtn)
+
+        self.layout.addLayout(self.fileOptionsLayout)
+    
         # The list of files in the current directory
         self.fileLst = QtWidgets.QListWidget()
         self.fileLst.setSortingEnabled(True)

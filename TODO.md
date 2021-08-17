@@ -9,20 +9,19 @@
 
 #### File Pane
 
-- Add refresh button
-- Add filetype checking (to ensure image files)
-- Only display image files (maybe have toggle on/off for this)
+- __Add refresh button__
+- __Add filetype checking (to ensure image files)__
+- __Only display image files (maybe have toggle on/off for this)__
 
 #### Options Pane
 
 - Add top menu bar
 
-
 #### General
 
 - Create/find some icons
 - Make sure window fits to screen size properly
-
+- Reformat all interface text so you can easily add other languages
 
 ### Text Editing
 
@@ -31,7 +30,8 @@
 
 ### Exporting
 
-- 
+- Export project as compiled pdf
+- Export project as html file with language switch button
 
 ### Configuration
 
