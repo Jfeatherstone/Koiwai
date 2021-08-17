@@ -2,19 +2,19 @@ import sys
 import os
 from pathlib import Path
 
-from Config import settings
+from UI.Config import settings
 
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 
 DEFAULT_WIDTH = 250
 
-class FileDialogPane(QtWidgets.QWidget):
+class FilePane(QtWidgets.QWidget):
 
     # The string we will be sending is the file path
     fileClickSgl = QtCore.pyqtSignal(str)
 
     def __init__(self, startDirectory, parent=None):
-        super(FileDialogPane, self).__init__(parent)
+        super(FilePane, self).__init__(parent)
 
         self.currentDirectory = startDirectory
 
