@@ -1,0 +1,23 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file alias="brush">icons/brush-outline.svg</file>
+    <file alias="bulb">icons/bulb-outline.svg</file>
+    <file alias="crop">icons/crop-outline.svg</file>
+    <file alias="eye-off">icons/eye-off-outline.svg</file>
+    <file alias="maximize">icons/maximize-outline.svg</file>
+    <file alias="minimize">icons/minimize-outline.svg</file>
+    <file alias="move">icons/move-outline.svg</file>
+    <file alias="printer">icons/printer-outline.svg</file>
+    <file alias="radio-button-on">icons/radio-button-on-outline.svg</file>
+    <file alias="save">icons/save-outline.svg</file>
+    <file alias="scissors">icons/scissors-outline.svg</file>
+    <file alias="shake">icons/shake-outline.svg</file>
+    <file alias="skip-back">icons/skip-back-outline.svg</file>
+    <file alias="skip-forward">icons/skip-forward-outline.svg</file>
+    <file alias="square">icons/square-outline.svg</file>
+    <file alias="star">icons/star-outline.svg</file>
+    <file alias="sync">icons/sync-outline.svg</file>
+    <file alias="text">icons/text-outline.svg</file>
+    <file alias="undo">icons/undo-outline.svg</file>
+</qresource>
+</RCC>

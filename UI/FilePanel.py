@@ -3,8 +3,10 @@ import os
 from pathlib import Path
 
 from UI.Config import settings
+from UI import qrc_assets
 
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
+
 
 DEFAULT_WIDTH = 250
 
@@ -60,7 +62,7 @@ class FilePane(QtWidgets.QWidget):
 
         # The refresh button
         self.refreshBtn = QtWidgets.QPushButton()
-        self.refreshBtn.setIcon(QtGui.QIcon('assets/icons/sync-outline.svg'))
+        self.refreshBtn.setIcon(QtGui.QIcon(':sync'))
         self.refreshBtn.setMaximumWidth(40)
         self.refreshBtn.clicked.connect(lambda x: self.updateFileList(self.currentDirectory))
         self.fileOptionsLayout.addWidget(self.refreshBtn)

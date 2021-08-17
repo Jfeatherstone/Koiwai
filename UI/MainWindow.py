@@ -4,16 +4,41 @@ from PyQt5 import QtWidgets, QtCore
 from UI import FilePane, ImagePane, OptionsPane	
 
 
-class MainWindow(QtWidgets.QWidget):
+class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, app):
         super(MainWindow, self).__init__()
 
+        """
+        General window settings
+        -----------------------
+        """
+       
         # Resize the window to fit the screen nicely
         # We give a little bit of padding so you can nicely see everything
         screen = app.primaryScreen()
         defaultWindowSize = screen.size() - QtCore.QSize(50, 75) #(width, height)
         self.resize(defaultWindowSize)
+
+
+        """
+        Menu bar
+        --------
+        """
+
+        self.menuBar = QtWidgets.QMenuBar()
+        self.setMenuBar(self.menuBar)
+
+        self.fileMenu = self.menuBar.addMenu("File")
+        self.editMenu = self.menuBar.addMenu("Edit")
+        self.viewMenu = self.menuBar.addMenu("View")
+
+        """
+        Main window content
+        -------------------
+        """
+
+        self.centralWidget = QtWidgets.QWidget()
 
         mainVerticalLayout = QtWidgets.QVBoxLayout()
 
@@ -40,7 +65,8 @@ class MainWindow(QtWidgets.QWidget):
         mainHorizontalLayout.addWidget(imagePane)
         mainVerticalLayout.addWidget(mainHorizontalLayout)
 
-        self.setLayout(mainVerticalLayout)
+        self.centralWidget.setLayout(mainVerticalLayout)
+        self.setCentralWidget(self.centralWidget)
 
         # Set some sizes of objects to make them look good
         imagePane.setMinimumWidth(screen.size().width() - filePane.size().width() - 150)
