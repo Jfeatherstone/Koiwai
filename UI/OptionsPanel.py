@@ -16,7 +16,7 @@ class OptionsPane(QtWidgets.QWidget):
                                            background-color: #AAAAAA;
                                            """)
         self.layout.addWidget(self.colorBackground)
-        
+       
         # Add the various image manipulating items in a little visual container
         self.imageManipContainer = QtWidgets.QLabel()
         self.imageManipContainer.setStyleSheet("""
