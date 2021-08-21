@@ -36,6 +36,8 @@ class ImagePane(QtWidgets.QWidget):
             return image.scaled(self.currentImage.size() / widthRatio)
         elif heightRatio > 1:
             return image.scaled(self.currentImage.size() / heightRatio)
+        else:
+            return image
 
 
     @QtCore.pyqtSlot(str)

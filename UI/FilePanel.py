@@ -113,12 +113,42 @@ class FilePane(QtWidgets.QWidget):
             self.fileLst.addItems(fileArr)
             return
 
+    def getNextFilePath(self):
+        selIndices = self.fileLst.selectedIndexes()
+        if len(selIndices) > 1:
+            selIndices = selIndices[-1]
+
+        if len(selIndices) == 0:
+            item = self.fileLst.item(0)
+        elif len(selIndices) == 1:
+            item = self.fileLst.item(selIndices[0].row()+1)
+
+        if item != None:
+            return self.currentDirectory + '/' + item.text()
+
+        return None
+
+    def getPreviousFilePath(self):
+        selIndices = self.fileLst.selectedIndexes()
+        if len(selIndices) > 1:
+            selIndices = selIndices[-1]
+
+        if len(selIndices) == 0:
+            item = self.fileLst.item(0)
+        elif len(selIndices) == 1:
+            item = self.fileLst.item(selIndices[0].row()-1)
+
+        if item != None:
+            return self.currentDirectory + '/' + item.text()
+
+        return None
+
+
     # Decorator indicates that this will be used to signal an event in another widget
     # (in the ImagePane, to be specific)
     @QtCore.pyqtSlot()
     def _onListItemClick(self):
         fileName = self.fileLst.currentItem().text()
-
         if fileName == '..':
             self.updateFileList(str(Path(self.currentDirectory).parent))
             return
