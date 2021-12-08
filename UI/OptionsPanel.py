@@ -8,7 +8,7 @@ class OptionsPane(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(OptionsPane, self).__init__(parent)
 
-        self.layout = QtWidgets.QVBoxLayout()
+        self.layout = QtWidgets.QHBoxLayout()
         
         self.colorBackground = QtWidgets.QWidget()
         self.colorBackground.setStyleSheet("""
@@ -25,6 +25,19 @@ class OptionsPane(QtWidgets.QWidget):
                                            """)
         
 
-        #self.colorBackground.addWidget(self.imageManipContainer)
+        self.layout.addWidget(self.imageManipContainer)
+
+
+        # Add the various image manipulating items in a little visual container
+        self.imageMaskContainer = QtWidgets.QVBoxLayout()
+        #self.imageMaskContainer.setStyleSheet("""
+        #                                   border: 1px solid black;
+        #                                   background-color: blue;
+        #                                   """)
+
+        self.imageMaskTitle = QtWidgets.QLabel("Image Mask")
+        self.imageMaskContainer.addWidget(self.imageMaskTitle)
+
+        self.layout.addLayout(self.imageMaskContainer)
 
         self.setLayout(self.layout)
