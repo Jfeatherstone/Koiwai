@@ -6,6 +6,12 @@ from UI import FilePane, ImagePane, OptionsPane
 
 class MainWindow(QtWidgets.QMainWindow):
 
+    moveToolClickSgl = QtCore.pyqtSignal(str)
+
+    def _clickMove(self, event):
+        #moveToolClickSgl.emit()
+        pass
+
     def __init__(self, app):
         super(MainWindow, self).__init__()
 
@@ -67,6 +73,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.editToolBar.addAction(self.zoomInTool)
         self.editToolBar.addAction(self.zoomOutTool)
 
+        self.moveTool.triggered.connect(self._clickMove)
+    
         """
         Main window content
         -------------------
@@ -106,5 +114,6 @@ class MainWindow(QtWidgets.QMainWindow):
         imagePane.setMinimumWidth(screen.size().width() - filePane.size().width() - 150)
         optionsPane.setMinimumHeight(120)
         optionsPane.setMaximumHeight(121)
+
 
         self.setWindowTitle('Koiwai')

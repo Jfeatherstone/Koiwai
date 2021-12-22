@@ -1,7 +1,7 @@
 import sys
 import os
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 
 class OptionsPane(QtWidgets.QWidget):
 
@@ -36,6 +36,7 @@ class OptionsPane(QtWidgets.QWidget):
         #                                   """)
 
         self.imageMaskTitle = QtWidgets.QLabel("Image Mask")
+        self.imageMaskTitle.setAlignment(Qt.Qt.AlignCenter)
         self.imageMaskContainer.addWidget(self.imageMaskTitle)
 
         self.layout.addLayout(self.imageMaskContainer)
