@@ -10,9 +10,15 @@ import cv2
 
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 
+from UI import EditToolBar
+
 class ImagePane(QtWidgets.QWidget):
 
     pastDragPosition = None
+    
+    imageFilePath = None
+
+    activeTool = EditToolBar.POINTER_TOOL
 
     totalRotation = 0
     totalTranslation = np.array([0, 0], dtype=int)
@@ -53,11 +59,23 @@ class ImagePane(QtWidgets.QWidget):
 
     @QtCore.pyqtSlot(str)
     def setActiveTool(self, toolStr):
-        pass
+        # A couple of the functions have a one-off effect
+        if toolStr == EditToolBar.RESET_TOOL:
+           
+            if self.imageFilePath is not None:
+                # Reset the adjustments, and re-render it
+                self.totalTranslation = np.array([0, 0], dtype=int)
+                self.totalRotation = 0
+                self.setActiveImage(self.imageFilePath)
 
+        else:
+            # Otherwise, we just set the active tool to the new one
+            self.activeTool = toolStr
+        print(self.activeTool)
 
     @QtCore.pyqtSlot(str)
     def setActiveImage(self, filePath):
+        self.imageFilePath = filePath
         self.currentImage = QtGui.QImage(filePath)
 
         # We may have to adjust the size of the image
@@ -86,10 +104,6 @@ class ImagePane(QtWidgets.QWidget):
         # Keep track of if we have changed the image and need to redisplay it
         editedImage = False
 
-        moveTool = True
-        rotateTool = False
-
-
         if self.colorBackground.pixmap() is not None:
 
             if self.pastDragPosition is not None:
@@ -101,7 +115,7 @@ class ImagePane(QtWidgets.QWidget):
                 differenceVector = posOnImagePane - self.pastDragPosition
 
                 # Now we do different things based on the current tool
-                if moveTool:
+                if self.activeTool == EditToolBar.MOVE_TOOL:
                     # image pane is 0, 0)
                     #print(differenceVector)
                     # We don't want to move the image pane itself, but the content
@@ -110,7 +124,7 @@ class ImagePane(QtWidgets.QWidget):
 
                     editedImage = True
                 
-                if rotateTool:
+                if self.activeTool == EditToolBar.ROTATE_TOOL:
 
                     # Determine whether we have a clockwise or counter-clockwise rotation
                     # We always rotate around the center of the image pane

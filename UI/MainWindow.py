@@ -1,17 +1,10 @@
 import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 
-from UI import FilePane, ImagePane, OptionsPane	
+from UI import FilePane, ImagePane, OptionsPane, EditToolBar
 
 
 class MainWindow(QtWidgets.QMainWindow):
-
-    moveToolClickSgl = QtCore.pyqtSignal(str)
-
-    def _clickMove(self, event):
-        #moveToolClickSgl.emit()
-        pass
-
     def __init__(self, app):
         super(MainWindow, self).__init__()
 
@@ -57,24 +50,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.fileToolBar.addAction(self.nextImageTool)
 
         # The various image manipulation tools
-        self.editToolBar = self.addToolBar('Edit')
 
-        self.moveTool = QtWidgets.QAction(QtGui.QIcon(':move'), '&Move')
-        self.cutTool = QtWidgets.QAction(QtGui.QIcon(':scissors'), '&Cut')
-        self.undoTool = QtWidgets.QAction(QtGui.QIcon(':undo'), '&Undo')
-        self.resetViewTool = QtWidgets.QAction(QtGui.QIcon(':square'), '&Reset View')
-        self.zoomInTool = QtWidgets.QAction(QtGui.QIcon(':maximize'), '&Zoom In')
-        self.zoomOutTool = QtWidgets.QAction(QtGui.QIcon(':minimize'), '&Zoom Out')
-
-        self.editToolBar.addAction(self.moveTool)
-        self.editToolBar.addAction(self.undoTool)
-        self.editToolBar.addAction(self.cutTool)
-        self.editToolBar.addAction(self.resetViewTool)
-        self.editToolBar.addAction(self.zoomInTool)
-        self.editToolBar.addAction(self.zoomOutTool)
-
-        self.moveTool.triggered.connect(self._clickMove)
-    
+        self.editToolBar = EditToolBar.EditToolBar()
+        self.addToolBar(self.editToolBar)
+        #self.editToolBar = self.addToolBar('Edit')
         """
         Main window content
         -------------------
@@ -101,6 +80,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Take care of communication between the various panels
         filePane.fileClickSgl.connect(imagePane.setActiveImage)
+
+        self.editToolBar.toolClickSgl.connect(imagePane.setActiveTool)
 
         # Add everything in the proper order
         mainHorizontalLayout.addWidget(filePane)
