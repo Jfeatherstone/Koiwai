@@ -64,14 +64,13 @@ class ImagePane(QtWidgets.QWidget):
            
             if self.imageFilePath is not None:
                 # Reset the adjustments, and re-render it
-                self.totalTranslation = np.array([0, 0], dtype=int)
-                self.totalRotation = 0
                 self.setActiveImage(self.imageFilePath)
 
         else:
             # Otherwise, we just set the active tool to the new one
             self.activeTool = toolStr
-        print(self.activeTool)
+            # And update the cursor icon
+            self.setCursor(EditToolBar.CURSORS[toolStr])
 
     @QtCore.pyqtSlot(str)
     def setActiveImage(self, filePath):
@@ -92,6 +91,9 @@ class ImagePane(QtWidgets.QWidget):
             # The center is also the width/2 or height/2
             self.imageCenter = tuple(np.array(self.currentImageArr.shape[1::-1]) / 2)
         
+            self.totalRotation = 0
+            self.totalTranslation = np.array([0, 0], dtype=int)
+
             self.colorBackground.setPixmap(QtGui.QPixmap.fromImage(self.currentImage))
             self.imageCornerPos = self.colorBackground.pos()
 

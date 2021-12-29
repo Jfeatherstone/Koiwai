@@ -1,11 +1,17 @@
 import sys
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets, QtCore, QtGui, Qt
 
 POINTER_TOOL = "pointer"
 MOVE_TOOL = "move"
 ROTATE_TOOL = "rotate"
 RESET_TOOL = "reset"
 ZOOM_TOOL = "zoom"
+
+# Various cursors for tools
+CURSORS = {POINTER_TOOL: Qt.Qt.ArrowCursor,
+           MOVE_TOOL: Qt.Qt.SizeAllCursor,
+           ROTATE_TOOL: Qt.Qt.OpenHandCursor,
+          }
 
 class EditToolBar(QtWidgets.QToolBar):
 
@@ -21,6 +27,13 @@ class EditToolBar(QtWidgets.QToolBar):
 
         self.resetViewTool = QtWidgets.QAction(QtGui.QIcon(':square'), '&Reset View')
         self.resetViewTool.triggered.connect(self._clickReset)
+
+        self.pointerTool = QtWidgets.QToolButton()
+        self.pointerTool.setIcon(QtGui.QIcon(':navigation-2'))
+        self.pointerTool.setCheckable(True)
+        self.pointerTool.setToolTip('Pointer')
+        self.pointerTool.clicked.connect(self._clickPointer)
+        self.toolButtonGroup.addButton(self.pointerTool) 
 
         self.moveTool = QtWidgets.QToolButton()
         self.moveTool.setIcon(QtGui.QIcon(':move'))
@@ -42,6 +55,7 @@ class EditToolBar(QtWidgets.QToolBar):
         self.addAction(self.undoTool)
         self.addAction(self.resetViewTool)
         
+        self.addWidget(self.pointerTool)
         self.addWidget(self.moveTool)
         self.addWidget(self.rotateTool)
         self.addAction(self.zoomInTool)
@@ -55,6 +69,10 @@ class EditToolBar(QtWidgets.QToolBar):
     def _clickRotate(self, event):
         if self.rotateTool.isChecked():
             self.toolClickSgl.emit(ROTATE_TOOL)
+
+    def _clickPointer(self, event):
+        if self.pointerTool.isChecked():
+            self.toolClickSgl.emit(POINTER_TOOL)
 
     def _clickReset(self, event):
         # No need to verify checked status, since this isn't a tool
